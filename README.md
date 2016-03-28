@@ -3,12 +3,15 @@ Generated static blogs
 
 Runs on racket-pollen
 
-Primary benefit of pollen is having a sane system for custom markdown
-Secondary benefit is having a sane system for writing html
-Tertiary benefit is having scheme lisp
+1. Primary benefit of pollen is having a sane system for custom markdown
+2. Secondary benefit is having a sane system for writing html
+3. Tertiary benefit is having scheme lisp
 
 notes.txt has all my notes for using pollen
+
 tufte-css-notes.txt has my notes for writing tufte-css-compatible html
+
+*who knew life didn't have to be so awful?*
 
 # sites for reference
 ## ``Rules''
