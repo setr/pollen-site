@@ -1,0 +1,112 @@
+Pollen files
+============
+Pollen uses double-extension syntax. Extension#1 is the output format, and Extension#2 is the input format. (ie file.html.pmd)
+.txt => text file
+.html => html file
+.p => pollen "null" extension; does nothing, but seperates our source from output. template.html == template.html.p
+.pp => pollen preprocess
+.pmd => preprocess then markdown
+.pm => pollen markup (using file pollen.rkt for rules)
+.rkt => racket source file
+pollen.rkt => markdown ruleset
+template.html => default template to insert into
+index.ptree => file to specify navigation order (for prev, next etc)
+
+alt + shift + v = ◊
+◊|variable| for markdown-variable insertion
+◊(functon) for markdown-function call
+◊{tag} for markdown-tag call
+◊em{◊|author|} => example of usage
+
+Pollen Template
+===============
+template.html.p
+
+<html> ... </html>
+standard html file, .p passes it to pollen so we can apply racket code using ◊
+◊(->html) converts X-expression to html
+◊(->html (html (head (meta #:charset "UTF-8")) (body doc)))
+=> outputs
+<html> <head> <meta charset="UTF-8"> </meta> 
+<body> ◊|doc| </body
+</head>
+
+the whole post-processed file will get stored in the variable ◊|doc| as a string
+so basic template would hard define our html, head etc tags
+and then we can just do something like
+<body> ◊(->html doc) </body> 
+for simple insertion of the source.
+
+Pollen New-Markdown
+===================
+pollen.rkt => auto-imported source file. local > parent; parent is not loaded if local dir has pollen.rkt
+(require "../pollen.rkt") => import parent's pollen.rkt
+(provide (all-from-out "../pollen.rkt") => re-exports everything from parent's pollen.rkt.
+(provide (all-defined-out)) => provides all definitions in the file to any files who (require) this file. racket functions are private-by-default
+
+(define (em . elements)
+  (txepr 'extra-big empty elements))
+=> example of a redefining the em tag. '. elements' == &rest elements => all other input pulled in as a list called elements
+texpr => builds a new X-expression from a (tag, attribute-list, list-of-elements)
+
+the (root) tag contains the entire document. Any functions attached to the root can operate on everything.
+
+◊(require pollen/decode txepr)
+◊(define (root . elements)
+   (txepr 'root empty (decode-elements elements
+      #:txepr-elements-proc decode-paragraphs
+      #:string-proc (compose1 smart-quotes smart-dashes))))
+=> applies (decode-elements) to everything in the document. decode-elements operates on special characters
+=> applies functions to element types
+=> decode-paragraphs converts newlines to <br> and such (applied to any text-expression, due to #:txexpr-elements proc)
+=> #:string-proc only applies to strings, which is only where smart-quotes/dashes would be relevant
+=> (compose1) creates one function out of many (each function applied in order. 
+=> decode-elements consumes dicts, so only one function per variable. hence (compose1) for multiple functions
+=> http://docs.racket-lang.org/pollen/Decode.html#%28def._%28%28lib._pollen%2Fdecode..rkt%29._decode-elements%29%29
+
+
+Pollen multi-output targets
+===========================
+special output extension .poly. ie file.poly.pm
+future investigation if necessary::: http://docs.racket-lang.org/pollen/fourth-tutorial.html
+
+Pollen MathJax and Code-Highlighting
+====================================
+Note: Both are extremely simple to add
+http://docs.racket-lang.org/pollen/mini-tutorial.html
+
+
+Pollen Programming Notes
+========================
+Pollen allows any command to pass. If ◊(function) is not defined, it is assumed to be a tag, and just inserted.
+  This means it would probably be good to have a validator run ala gwern.
+◊|doc| contains the output of the source
+◊|meta| is a dict containing metadata for your document; not included in the output post-compilation.
+◊(define-meta cat "chopper")
+    here-path is the only auto-defined metadata, which simply contains the absolute path to the file.
+we can retrieve data from ◊|meta| by using (select)
+    ◊(select 'cat metas) => "chopper"
+The metas for each source file is sotred in cached-metas
+
+If we wanted, say, a ToC, we can get it from the metas.
+#lang racket/base
+(require "pollen-source.rkt"); imports the whole pollen source file
+(require (submod "pollen-source.rkt" metas)); imports *only* the metas dict (more efficient)
+
+
+Useful Extensions
+=================
+Tag-Counter (footnotes !)
+    https://github.com/malcolmstill/pollen-count
+
+Tufte CSS
+    https://edwardtufte.github.io/tufte-css/
+Implemented in Pollen 
+    https://github.com/fasiha/pollen-guie
+
+
+Useful Typographic Notes
+========================
+Letter Spacing
+    http://webtypography.net/2.1.6
+

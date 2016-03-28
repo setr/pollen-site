@@ -1,0 +1,139 @@
+Defines for
+
+Sectioning
+==========
+html
+body
+h1
+h2
+h3
+
+p class="subtitle"
+class="numeral"
+class="danger"
+
+article
+section
+
+
+Paragraphs
+==========
+p, ol, ul
+p
+div class="epigraph" 
+    > blockquote
+        >p
+        >footer
+        >cite
+
+blockquote p
+blockquote footer
+
+Images
+======
+figure
+figcaption
+figure class="fullwidth"
+
+
+Notes
+=====
+class="sidesnote"
+class="marginnote"
+
+class="table-caption"
+class="sidenote-number"
+
+
+
+
+
+Usage
+=========
+
+Code
+<pre class="code"> content </pre>
+
+Sidenote
+<label for="sn-demo" class="margin-toggle sidenote-number"></label>     ; for-value needs to match input's id value
+<input type="checkbox" id="sn-demo" class="margin-toggle" />
+<span class="sidenote">
+ content
+</span>
+
+Margin-note (no numbering)
+<label for="mn-demo" class="margin-toggle">&#8853;</label>              ; &#8853; => ⊕, this becomes the toggle symbol for small screens
+<input type="checkbox" id="mn-demo" class="margin-toggle" />
+<span class="marginnote">
+  stuff
+</span>
+
+Figure
+<figure>
+ <label for="mn-exports-imports" class="margin-toggle">&#8853;</label> 
+ <input type="checkbox" id="mn-exports-imports" class="margin-toggle"/>  ;; margin'd subtitle for the image
+ <span class="marginnote"> content </span>
+
+ <img src="img/napoleans-march.jpg" />                                   ;; pulls in the actual image
+</figure>
+
+Full-width Figure
+<figure class="fullwidth">
+ <img src="img" />
+</figure>
+
+Blockquote
+<blockquote cite="url">
+  <p> quote </p>
+  <footer>
+   <a href="url">
+    source
+   </a>
+  </footer>
+</blockquote>
+
+Epigraph (quote at start of section)
+<div class="epigraph">
+ <blockquote>
+  <p>For a successful technology, reality must take precedence over public relations, for Nature cannot be fooled.</p> ;; the quote
+  <footer>
+   Richard P. Feynman,                                           ;; author 
+   <cite>“What Do You Care What Other People Think?”</cite>      ;; source
+  </footer>                       
+ </blockquote>
+</div>
+
+
+GLOBAL Structure
+============
+document should be structured like this
+
+<body>
+ <article>
+  <h1> TITLE </h1>
+  <p class="subtitle"> subtitle </p>
+  <section>
+   <p> content </p>
+   <p> content </p>
+   <p> content </p>
+  </section>
+
+  <section>
+   <h2> L2 TITLE </h2>
+   <p> content </p>
+   <p> content </p>
+   <p> content </p>
+  </section>
+   
+  <section>
+   <h2> L2 TITLE </h2>
+   <h3> L3 TITLE </h3>
+   <p> content </p>
+   <p> content </p>
+   <blockquote><p> quote </p><footer> Author <cite> source </cite></footer></blockquote>
+  </section>
+ </article>
+</body>
+
+
+
