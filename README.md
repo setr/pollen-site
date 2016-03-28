@@ -37,3 +37,6 @@ http://unitscale.com/mb/technique/pollen.rkt.html
 http://xxyxyz.org/bridges/
 
 http://galileo.phys.virginia.edu/classes/551.jvn.fall01/primer.htm
+
+### books
+Concrete Mathematics *Spacing, Body Font, Left-Margin Notes*
