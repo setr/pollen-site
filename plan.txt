@@ -1,0 +1,27 @@
+◊filen{ } 
+  for displaying filenames
+
+◊snip{ }
+  for displaying code example snippets (but not full code)
+  basically, inlining code.
+
+◊key{ }
+  for displaying keywords, but with only minor change.
+  ie for ◊|variable| => ◊|META|◊key{variable}
+
+◊polyc{ }
+  for displaying pollen commands
+  NEED TO FIGURE OUT NESTING
+  color it maroon
+
+◊code{ }
+  needs to strip the first break, because I want to write it in markdown as
+  ◊code{
+  ... ... 
+  ... ...}
+
+◊pollen-ex{ }
+  need to figure out a formatting for ◊|variable| ◊(function) ◊tag{variable} stuff
+  maybe just ◊ gets colored (redefine META)
+
+Add lines for headers

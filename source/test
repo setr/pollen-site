@@ -1,0 +1,200 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700'
+rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="../../css/tufte.css" />
+</head>
+<body>
+<h1>Pollen Notes</h1>
+<h2>Pollen Files</h2>
+<p>Pollen uses double-extension syntax. Extension#1 is the output
+format, and Extension#2 is the input format. (ie file.html.pmd)
+<br />
+<filen>.txt</filen>&#226;&#8225;&#8217; text file
+<br />
+<filen>.html</filen>&#226;&#8225;&#8217; html file
+<br />
+<filen>.p</filen>&#226;&#8225;&#8217; pollen
+&#226;&#8364;&#339;null&#226;&#8364; extension; does nothing, but
+seperates our source from output. template.html == template.html.p
+<br />
+<filen>.pp</filen>&#226;&#8225;&#8217; pollen preprocess
+<br />
+<filen>.pmd</filen>&#226;&#8225;&#8217; preprocess then markdown
+<br />
+<filen>.pm</filen>&#226;&#8225;&#8217; pollen markup (using file
+pollen.rkt for rules)
+<br />
+<filen>.rkt</filen>&#226;&#8225;&#8217; racket source file
+<br />
+<filen>pollen.rkt</filen>&#226;&#8225;&#8217; markdown ruleset
+<br />
+<filen>template.html</filen>&#226;&#8225;&#8217; default template
+to insert into
+<br />
+<filen>index.ptree</filen>&#226;&#8225;&#8217; file to specify
+navigation order (for prev, next etc)</p>
+<p>alt + shift + v = 
+<span class="pollen-meta">&#226;&#8212;&#352;</span>
+<br />
+<span class="pollen-meta">&#226;&#8212;&#352;|variable|</span>for
+markdown-variable insertion
+<br />
+<span class="pollen-meta">&#226;&#8212;&#352;(function)</span>for
+markdown-function call
+<br />
+<span class="pollen-meta">&#226;&#8212;&#352;{tag}</span>for
+markdown-tag call
+<br />
+<span class="pollen-meta">
+<p>&#226;&#8212;&#352;tag{
+<span class="pollen-meta">&#226;&#8212;&#352;</span>|variable| 
+<span class="pollen-meta">&#226;&#8212;&#352;</span>|variable|}</p>
+<h2>Pollen Template</h2>
+<p>
+<filen>template.html.p</filen>
+</p>
+<p>
+<snip>&lt;html&gt; ... &lt;/html&gt;</snip>
+<br />standard html file, .p passes it to pollen so we can apply
+racket code using 
+<span class="pollen-meta">&#226;&#8212;&#352;</span>
+<br />
+<span class="pollen-meta">
+&#226;&#8212;&#352;(-&gt;html)</span>converts X-expression to html
+<br />
+<span class="pollen-meta">&#226;&#8212;&#352;(-&gt;html (html (head
+(meta #:charset &#226;&#8364;&#339;UTF-8&#226;&#8364;)) (body
+doc)))</span>
+<br />&#226;&#8225;&#8217; outputs</p>
+<pre class="code">
+&lt;html&gt; &lt;head&gt; &lt;meta charset="UTF-8"&gt;
+&lt;/meta&gt;
+&lt;body&gt; 
+<span class="pollen-meta">&#226;&#8212;&#352;|doc|</span> &lt;/body
+&lt;/head&gt;
+</pre>
+<p>the whole post-processed file will get stored in the variable 
+<span class="pollen-meta">&#226;&#8212;&#352;</span>|doc| as a
+string
+<br />so basic template would hard define our html, head etc tags
+<br />and then we can just do something like
+<br />
+<snip>&lt;body&gt; 
+<span class="pollen-meta">&#226;&#8212;&#352;(-&gt;html
+doc)</span>&lt;/body&gt;</snip>
+<br />for simple insertion of the source.</p>
+<h2>Pollen New-Markdown</h2>
+<p>pollen.rkt &#226;&#8225;&#8217; auto-imported source file. local
+&gt; parent; parent is not loaded if local dir has pollen.rkt
+<br />
+<snip>(require
+&#226;&#8364;&#339;../pollen.rkt&#226;&#8364;)</snip>&#226;&#8225;&#8217;
+import parent&#226;&#8364;&#8482;s pollen.rkt
+<br />
+<snip>(provide (all-from-out
+&#226;&#8364;&#339;../pollen.rkt&#226;&#8364;)</snip>&#226;&#8225;&#8217;
+re-exports everything from parent&#226;&#8364;&#8482;s pollen.rkt.
+<br />
+<snip>(provide (all-defined-out))</snip>&#226;&#8225;&#8217;
+provides all definitions in the file to any files who (require)
+this file. racket functions are private-by-default</p>
+<pre class="code">
+(define (em . elements)
+  (txepr 'extra-big empty elements))
+</pre>
+<p>&#226;&#8225;&#8217; example of a redefining the em tag.
+&#226;&#8364;&#732;. elements&#226;&#8364;&#8482; == &amp;rest
+elements &#226;&#8225;&#8217; all other input pulled in as a list
+called elements
+<br />texpr &#226;&#8225;&#8217; builds a new X-expression from a
+(tag, attribute-list, list-of-elements)</p>
+<p>the (root) tag contains the entire document. Any functions
+attached to the root can operate on everything.</p>
+<pre class="code">
+(require pollen/decode txepr)
+</pre>
+<p>(define (root . elements)
+<br />(txepr &#226;&#8364;&#732;root empty (decode-elements
+elements
+<br />#:txepr-elements-proc decode-paragraphs
+<br />#:string-proc (compose1 smart-quotes smart-dashes))))</p>
+</span>
+<br />&#226;&#8225;&#8217; applies (decode-elements) to everything
+in the document. decode-elements operates on special characters
+<br />&#226;&#8225;&#8217; applies functions to element types
+<br />&#226;&#8225;&#8217; decode-paragraphs converts newlines to
+&lt;br&gt; and such (applied to any text-expression, due to
+#:txexpr-elements proc)
+<br />&#226;&#8225;&#8217; #:string-proc only applies to strings,
+which is only where smart-quotes/dashes would be relevant
+<br />&#226;&#8225;&#8217; (compose1) creates one function out of
+many (each function applied in order.
+<br />&#226;&#8225;&#8217; decode-elements consumes dicts, so only
+one function per variable. hence (compose1) for multiple functions
+<br />&#226;&#8225;&#8217; 
+<a href="http://docs.racket-lang.org/pollen/Decode.html#%28def._%28%28lib._pollen%2Fdecode..rkt%29._decode-elements%29%29">
+Decode Documentation</a></p>
+<h2>Pollen multi-output targets</h2>
+<p>special output extension .poly. ie file.poly.pm
+<br />future investigation if necessary &#226;&#8225;&#8217; 
+<a href="http://docs.racket-lang.org/pollen/fourth-tutorial.html">
+Pollen Poly Docs</a></p>
+<h2>Pollen MathJax and Code-Highlighting</h2>
+<p>Note: Both are extremely simple to add
+<br />
+<a href="http://docs.racket-lang.org/pollen/mini-tutorial.html">
+Pollen MathJax</a></p>
+<h2>Pollen Programming Notes</h2>
+<p>Pollen allows any command to pass. If 
+<span class="pollen-meta">&#226;&#8212;&#352;(function)</span>is
+not defined, it is assumed to be a tag, and just inserted.
+<br />This means it would probably be good to have a validator run
+ala gwern.
+<br />
+<poly>|doc|</poly>contains the output of the source
+<br />
+<poly>|meta|</poly>is a dict containing metadata for your document;
+not included in the output post-compilation.
+<br />
+<poly>(define-meta cat
+&#226;&#8364;&#339;chopper&#226;&#8364;)</poly>
+<br />here-path is the only auto-defined metadata, which simply
+contains the absolute path to the file.
+<br />we can retrieve data from 
+<span class="pollen-meta">&#226;&#8212;&#352;</span>|meta| by using
+(select)
+<br />
+<poly>(select &#226;&#8364;&#732;cat
+metas)</poly>&#226;&#8225;&#8217;
+&#226;&#8364;&#339;chopper&#226;&#8364;
+<br />The metas for each source file is sotred in cached-metas</p>
+<p>If we wanted, say, a ToC, we can get it from the metas.
+<br />#lang racket/base
+<br />
+<snip>(require
+&#226;&#8364;&#339;pollen-source.rkt&#226;&#8364;);</snip>imports
+the whole pollen source file
+<br />
+<snip>(require (submod
+&#226;&#8364;&#339;pollen-source.rkt&#226;&#8364;
+metas));</snip>imports *only* the metas dict (more efficient)</p>
+<h2>Useful Extensions</h2>
+<p>Tag-Counter (footnotes !)
+<br />
+<a href="https://github.com/malcolmstill/pollen-count">
+Pollen-Count</a></p>
+<p>Tufte CSS
+<br />
+<a href="https://github.com/popopome/pollentufte">Tufte CSS</a></p>
+<p>Implemented in Pollen
+<br />
+<a href="https://github.com/fasiha/pollen-guie">
+Pollen-Tufte</a></p>
+<h2>Useful Typographic Notes</h2>
+<p>Letter Spacing
+<br />
+<a href="http://webtypography.net/2.1.6">Web Typography</a></p>
+</body>
+</html>

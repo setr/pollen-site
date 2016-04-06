@@ -1,10 +1,35 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+        <!-- highlighting is now handled server-side using pigments
+        <script src="../../js/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        -->
+
+        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
+        <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="../../css/myfuncs.css"/>
+        <link rel="stylesheet" href="../../css/code.css"/>
         <link rel="stylesheet" href="../../css/tufte.css"/>
+        <link rel="stylesheet" href="../../css/sidebar.css"/>
+
     </head>
     <body>
+        <div id="sidebar">
+            <div id="logo">
+                <!-- img link -->
+            </div>
+            <div id="sidebar-links">
+                <p>
+                    <!-- list of links -->
+                    <a> Index </a>
+
+                    <a> Keys </a>
+
+                    <a> Mine </a>
+                </p>
+            </div>
+        </div>
             ◊(->html doc #:splice #t)
     </body>
-</html
+</html>
