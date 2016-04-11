@@ -1,27 +1,18 @@
-◊filen{ } 
-  for displaying filenames
+I'm going to give up on properly setting up racket to handle categories
 
-◊snip{ }
-  for displaying code example snippets (but not full code)
-  basically, inlining code.
+Instead, I'll have a python script generate a tag-page in tags/ , to be served statically.
+Tag links will simply link to tags/tag.html
 
-◊key{ }
-  for displaying keywords, but with only minor change.
-  ie for ◊|variable| => ◊|META|◊key{variable}
+We'll render each pollen file, using `raco pollen render inputfile outputfile`, dropping it into the html/ dir
+then we'll scan the html with python, finding "titles" and "tags"
+and generate a page for each tag, using jinja for templating
+html/tags/ will store all the tag pages
+the html/ dir gets scp'd to nearlyfreespeech webserver
+And the whole thing exists there statically.
 
-◊polyc{ }
-  for displaying pollen commands
-  NEED TO FIGURE OUT NESTING
-  color it maroon
-
-◊code{ }
-  needs to strip the first break, because I want to write it in markdown as
-  ◊code{
-  ... ... 
-  ... ...}
-
-◊pollen-ex{ }
-  need to figure out a formatting for ◊|variable| ◊(function) ◊tag{variable} stuff
-  maybe just ◊ gets colored (redefine META)
-
-Add lines for headers
+** How to represent the tag-list? ** 
+List of headers, linked to page
+    Render, get <span id="title"> title </title>
+Header w/ first paragraph ala http://mstill.io/blog/category/programming.html
+    Render first, then find anything in <span id="tag"> blocks
+    then get the first <p> </p> block, and thats our first paragraph

@@ -1,6 +1,6 @@
 #lang pollen
-
-◊h1{Pollen Notes}
+◊define-meta[tags]{notes, help}
+◊define-meta[title]{Pollen Notes}
 
 ◊section{Pollen Files}
 ============

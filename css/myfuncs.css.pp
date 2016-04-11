@@ -9,12 +9,15 @@
         -webkit-transition-duration: ~a;
         transition-duration: ~a;"  background background background time time time))
 
+.section,
 .definition { /*font-family: et-book-roman-old-style; */
               color: rgb(0,0,100);
               font-variant: small-caps;
+              text-transform: lowercase;
+              text-align: right;
               float: left;
               clear: left;
-              margin-left: -27%;
+              margin-left: -24%;
               width: 20%;
               margin-top:0;
               margin-bottom: 0;

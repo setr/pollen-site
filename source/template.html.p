@@ -8,10 +8,10 @@
 
         <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
         <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../../css/myfuncs.css"/>
-        <link rel="stylesheet" href="../../css/code.css"/>
-        <link rel="stylesheet" href="../../css/tufte.css"/>
-        <link rel="stylesheet" href="../../css/sidebar.css"/>
+        <link rel="stylesheet" href="../css/myfuncs.css"/>
+        <link rel="stylesheet" href="../css/code.css"/>
+        <link rel="stylesheet" href="../css/tufte.css"/>
+        <link rel="stylesheet" href="../css/sidebar.css"/>
 
     </head>
     <body>
@@ -30,6 +30,13 @@
                 </p>
             </div>
         </div>
+        ◊(->html (h1 (select-from-metas 'title here)))
+        ◊when/splice[(select-from-metas 'tags here)]{
+            ◊(->html `(div ((class "tags"))
+                        ,@(format-cats (select-from-metas 'tags here))))
+        }
+
             ◊(->html doc #:splice #t)
+
     </body>
 </html>

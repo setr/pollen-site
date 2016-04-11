@@ -1,4 +1,5 @@
 #lang pollen/mode racket/base
+(require racket/list)
 (require pollen/tag)
 (require txexpr)
 (require pollen/decode)
@@ -7,6 +8,7 @@
 
 (provide (all-defined-out))
 (provide (all-from-out pollen/unstable/pygments))
+(provide add-between)
 
 
 (define headline (default-tag-function 'h2))
@@ -107,6 +109,11 @@
        (input ((id ,label-val) (type "checkbox") (class "margin-toggle")))
        (span ((class "sidenote")) ,@elements))))
 
+(define (blockquote author . elements)
+  (txexpr 'blockquote empty
+          `((p ,@elements)
+            (footer ,author))))
+
 
 ; Simple unicode substitutions
 (define (my-smart-arrow x)
@@ -120,16 +127,54 @@
   (string-replace x #px"={3,}" ""))
 
 (define (string-replacements)
-  (compose1 my-smart-arrow 
+  ;; compose will apply functions in backwards order
+  (compose1 
+            ;; this is just for simple in-text math unicode
+            ;; proper math would utilize mathjax.
+            (λ (x) (string-replace x "+" "＋"))
+            ;; replace / with ÷ if it's preceded/followed with numbers or parenthesis
+            ;; otherwise its probably part of a normal string like/or http://
+            (λ (x) (string-replace x #px"(?<=[\\d()] ?)/(?= ?[\\d()])" "÷"))
+            (λ (x) (string-replace x "<" "＜"))
+            (λ (x) (string-replace x ">" "＞"))
+            (λ (x) (string-replace x "=" "＝"))
+            (λ (x) (string-replace x "~" "～"))
+            (λ (x) (string-replace x "+-" "±"))
+            (λ (x) (string-replace x "==" "≡"))
+            (λ (x) (string-replace x "/=" "≠"))
+            (λ (x) (string-replace x "<=" "≤"))
+            (λ (x) (string-replace x ">=" "≥"))
+            ;; these are applied first
+            my-smart-arrow 
             my-diamond-replace
             my-seperator-erase
             smart-quotes
             smart-dashes))
 
 (define exclusion-mark-attr '(decode "exclude"))
+
 (define (root . items)
-  (decode `(decoded-root ,@items)
-          #:txexpr-elements-proc detect-paragraphs
-          #:string-proc (string-replacements) ;(compose1 smart-quotes smart-dashes replace-arrow)
-          #:exclude-tags '(style script pre)
-          #:exclude-attrs (list exclusion-mark-attr)))
+  (decode 
+    (decode `(decoded-root ,@items)  ;; this decode skips code blocks
+            #:txexpr-elements-proc detect-paragraphs
+            #:string-proc (string-replacements) 
+            #:exclude-tags '(style script pre)
+            #:exclude-attrs (list exclusion-mark-attr))
+    ;; If we start writing haskell, arrow-replacement will be a problem.
+    #:string-proc (compose1 my-smart-arrow my-diamond-replace))) ;;this one excludes nothing
+
+
+; CODE STOLEN FROM MSTILL.IO
+(define (category->link category)
+  `(a [[href ,(string-append "tags/" category ".html")]]
+      ,category))
+
+(define (cat-string->list string)
+  (map (λ (tag)
+          (apply string-append tag))
+       (map (λ (tag)
+               (add-between tag " "))
+            (map string-split (map string-trim (string-split string ","))))))
+
+(define (format-cats cats)
+  (add-between (map category->link (cat-string->list cats)) ", "))

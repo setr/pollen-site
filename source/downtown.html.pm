@@ -1,4 +1,6 @@
 #lang pollen
+◊define-meta[tags]{notes, help}
+◊define-meta[title]{Downtown}
 
 ◊(p "foo" (@ "bar") "zam")
 I am me◊(margin-note "a man without a cause")
