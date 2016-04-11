@@ -1,0 +1,7 @@
+#lang pollen/ptree
+
+◊notes{
+    notes.html
+    downtown.html
+    tufte-css-notes.html
+    }
