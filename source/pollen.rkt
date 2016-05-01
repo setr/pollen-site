@@ -17,8 +17,11 @@
 (define (link url text) `(a ((href ,url)) ,text))
 
 (define extlink-class "extlink")
-(define (extlink url . texts)
-  `(a ((href ,url)(class ,extlink-class)) ,@texts)) 
+(define (extlink url . text)
+  `(a ((href ,url)(class ,extlink-class)) ,@text)) 
+
+(define (inlink url . text) ;; tag is handled properly by python
+  `(a ((href ,url) (class "inlink")) ,@text))
 
 
 

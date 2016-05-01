@@ -8,9 +8,16 @@
         -moz-transition-duration: ~a;
         -webkit-transition-duration: ~a;
         transition-duration: ~a;"  background background background time time time))
+emph {
+    font-weight: bold;
+    }
 
-.section,
+.section {
+    font-size: 2rem;
+    margin-left: -15%;
+}
 .definition { /*font-family: et-book-roman-old-style; */
+              letter-spacing: .05em;
               color: rgb(0,0,100);
               font-variant: small-caps;
               text-transform: lowercase;
@@ -22,7 +29,7 @@
               margin-top:0;
               margin-bottom: 0;
               font-size: 1.3rem;
-              line-height 1.3;
+              line-height: 1.3;
               vertical-align: baseline;
               position: relative; }
 

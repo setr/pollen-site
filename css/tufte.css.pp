@@ -39,14 +39,14 @@
 /* Tufte CSS styles */
 html { font-size: .8em; }
 
-body { width: 87.5%;
+body { width: 79.5%;
        margin-left: auto;
        margin-right: auto;
-       padding-left: 20.5%;
+       padding-left: 25%;
        /*font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif; */
        font-family: 'Montserrat', sans-serif;
        /* background-color: #fffff8; */
-       background-color: #ffffff
+       background-color: #ffffff;
        color: #111;
        max-width: 1400px;
        counter-reset: sidenote-counter; }
@@ -89,6 +89,7 @@ section { padding-top: 1rem;
 p, ol, ul { font-size: 1.3rem; }
 
 p { line-height: 2rem;
+    text-align: justify;
     margin-top: 1.4rem;
     margin-bottom: 1.4rem;
     padding-right: 0;
@@ -175,8 +176,8 @@ img { max-width: 100%; }
 .sidenote, .marginnote { /*font-family: Montserrat;*/
                          float: right;
                          clear: right;
-                         margin-right: -52%;
-                         width: 40%;
+                         margin-right: -38%;
+                         width: 30%;
                          margin-top: 0;
                          margin-bottom: 0;
                          font-size: 1rem;
@@ -210,7 +211,7 @@ img { max-width: 100%; }
 .sidenote:before { content: counter(sidenote-counter) " ";
                    top: -0.5rem; }
 
-p, hr, footer, table, div.table-wrapper-small, div.supertable-wrapper > p, div.booktabs-wrapper { width: 60%; }
+p, hr, footer, table, div.table-wrapper-small, div.supertable-wrapper > p, div.booktabs-wrapper { width: 65%; }
 hr {margin-left: 0;}
 
 div.fullwidth, table.fullwidth { width: 100%; }

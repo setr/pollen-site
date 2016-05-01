@@ -30,7 +30,7 @@
                 </p>
             </div>
         </div>
-        ◊(->html (h1 (select-from-metas 'title here)))
+        ◊(->html `(h1 ((id "title")) ,(select-from-metas 'title here)))
         ◊when/splice[(select-from-metas 'tags here)]{
             ◊(->html `(div ((class "tags"))
                         ,@(format-cats (select-from-metas 'tags here))))

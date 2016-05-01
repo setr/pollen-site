@@ -1,0 +1,15 @@
+# mac files
+.DS_Store
+
+# all our work is in pollen files
+*.html
+
+# pollen server files
+pollen-cache/*
+compiled/*
+*/pollen-cache/*
+*/compiled/*
+
+
+
+

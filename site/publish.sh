@@ -6,6 +6,7 @@ if [ ! -d $DIRECTORY ]; then
         or the script."
     exit 0
 fi
+
 # make sure our working directory is correct..
 cd $DIRECTORY
 rm -rf www/
@@ -19,21 +20,27 @@ cd temp
 
 # because pollen render is broken
 # tell it to render a directory and it reads the path as dir/dir/
-# so we have to go into each folder first.
-cd html
-raco pollen render 
-cd ../css
-raco pollen render 
-cd ../js
-raco pollen render
-cd ../../
+# so we have to go into each folder first, and render from there
+cd html && raco pollen render 
+
+cd ../css && raco pollen render 
+cat *.css | csso > mangled.css  # css minifying
+
+cd ../js && raco pollen render
+
+cd $DIRECTORY
+
+# files that we don't want to get published, but pollen won't skip over
+rm temp/html/template.html  
+rm temp/html/null.null
 
 raco pollen publish temp/ www/
 
-rm www/html/template.html  #this file shouldn't even get published...
 rm -rf temp
 
 mkdir www/html/tags/
 
+cd ppr  
+./tag-gen.py
 
-
+cd $DIRECTORY
