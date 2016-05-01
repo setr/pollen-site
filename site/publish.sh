@@ -41,6 +41,7 @@ rm -rf temp
 mkdir www/html/tags/
 
 cd ppr  
-./tag-gen.py
+./tag_and_inlink.py
+#./tag-gen.py
 
 cd $DIRECTORY

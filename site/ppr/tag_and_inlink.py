@@ -5,6 +5,8 @@ from os import listdir
 from os.path import isfile, join
 from jinja2 import Environment, FileSystemLoader
 from collections import defaultdict
+from pprint import pprint
+
 
 roothtmldir = 'www/html'
 env = Environment(loader=FileSystemLoader('.'))
@@ -22,13 +24,13 @@ def gettitle(html):
 def inlinking(htmlbody):
     outfiles = []
     inlinks = dict()
+    errorlist = []
     for f, html in htmlbody:   
         realtitle = gettitle(html)
         normal = normalize(realtitle)
         inlinks[normal] = (realtitle, f)
 
     for f, html in htmlbody:
-        changed = False
 
         html = BeautifulSoup(html, 'lxml')
         for link in html.findAll('a', {'class':'inlink'}):
@@ -41,17 +43,25 @@ def inlinking(htmlbody):
             text = normalize(text)
 
             if not link.get_text().strip():
-                link.string = link[text][0]
+                #link.string = link[text][0]
                 link.string = link['href'] # paste non-normalized text
 
             if text not in inlinks:
-                print "Hey! You've got an inlink in %s that doesn't match any title I know of: %s" % (f, text)
+                errorlist.append("In %s, found %s." % (f, text))
             else:
                 _ , link['href'] = inlinks[text]
-                changed = True
-                print "found a link! %s: %s;\nMapping to %s: %s (RealTitle:" % (f, text, text, inlinks[text]) 
-        filename = htmldir + "/" + f
-        outfiles.append((filename, html.prettify("utf-8")))
+                #print "found a link! %s: %s;\nMapping to %s: %s (RealTitle:" % (f, text, text, inlinks[text]) 
+        filename = f
+        outfiles.append((f, html.prettify("utf-8")))
+    if errorlist:
+        print "INLINK ERRORS"
+        print "Could not match the following titles to any document:"
+        pprint(errorlist)
+        print "------"
+        print "Here's the list of names I know of: "
+        print
+        pprint(inlinks.keys())
+        
     return outfiles
         
         #if changed:
@@ -69,10 +79,11 @@ def tagging(htmlbody):
         # all links within the tags section
         for tag in soup.findAll('a'):
             tagname = tag.string.strip()
-            ref = '../../' + f
+            ref = '../' + f
             tagdict[tagname].append((title, ref))
     for tag in tagdict:
-        f = "%s/tags/%s.html" % (htmldir, tag)
+        f = "tags/%s.html" % tag
+        #f = "%s/tags/%s.html" % (htmldir, tag)
         html = template.render(tag=tag, files=tagdict[tag])
         mybody.append((f, html))
     return mybody
@@ -81,14 +92,14 @@ def tagging(htmlbody):
 #         with open("%s/tags/%s.html" % (htmldir, tag), "wb") as fh:
 #             fh.write(template.render(tag=tag, files=tagdict[tag]))
 
-htmldir = '../www/html'
+htmldir = '../www/html/'
 htmlfiles = [f for f in listdir(htmldir) if isfile(join( htmldir, f )) and re.match('.*\.html$', f )]
 htmlbody = [(f, open(join(htmldir, f), 'r').read()) for f in htmlfiles]
-
-htmlbody = inlinking(htmlbody)
-htmlbody = tagging(htmlbody)
+# [ (filepath, html) ]
+# filepaths need to be relative to www/html/ dir
+htmlbody = inlinking(htmlbody) # substitutes in-links
+htmlbody = tagging(htmlbody) # adds a bunch of tag-page-lists into /tags
 
 for f, html in htmlbody:
-    with open(f, "wb") as fh:
-        print f
+    with open(join(htmldir, f), "wb") as fh:
         fh.write(html)

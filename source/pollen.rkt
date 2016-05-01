@@ -23,9 +23,6 @@
 (define (inlink url . text) ;; tag is handled properly by python
   `(a ((href ,url) (class "inlink")) ,@text))
 
-
-
-
 ;; Simple Tags
 ;;; highlight is imported from the pygments module. 
 ;;; prints code blocks. usage:

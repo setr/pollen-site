@@ -8,10 +8,7 @@
 
         <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
         <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../css/myfuncs.css"/>
-        <link rel="stylesheet" href="../css/code.css"/>
-        <link rel="stylesheet" href="../css/tufte.css"/>
-        <link rel="stylesheet" href="../css/sidebar.css"/>
+        <link rel="stylesheet" href="../css/mangled.css"/>
 
     </head>
     <body>

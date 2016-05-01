@@ -14,7 +14,7 @@ emph {
 
 .section {
     font-size: 2rem;
-    margin-left: -15%;
+    margin-left: -2em;
 }
 .definition { /*font-family: et-book-roman-old-style; */
               letter-spacing: .05em;

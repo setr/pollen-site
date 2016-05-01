@@ -128,7 +128,7 @@ figure { padding: 0;
          font-size: 100%;
          font: inherit;
          vertical-align: baseline;
-         max-width: 60%;
+         max-width: 65%;
          -webkit-margin-start: 0;
          -webkit-margin-end: 0;
          margin: 0 0 3em 0; }
