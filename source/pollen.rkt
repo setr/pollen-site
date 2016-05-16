@@ -166,7 +166,7 @@
 
 ; CODE STOLEN FROM MSTILL.IO
 (define (category->link category)
-  `(a [[href ,(string-append "tags/" category ".html")]]
+  `(a [[href ,(string-append "/html/index.html#" category "")]]
       ,category))
 
 (define (cat-string->list string)

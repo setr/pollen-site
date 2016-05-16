@@ -1,14 +1,14 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <!-- highlighting is now handled server-side using pigments
+        <!-- highlighting is now handled server-side using pygments
         <script src="../../js/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
         -->
 
-        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
-        <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="../css/mangled.css"/>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' data-mincss="ignore" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css' data-mincss="ignore" />
+        <link rel="stylesheet" href="/css/mangled.css"/>
 
     </head>
     <body>

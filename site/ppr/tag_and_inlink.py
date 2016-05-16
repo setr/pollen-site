@@ -2,15 +2,17 @@
 from bs4 import BeautifulSoup, SoupStrainer
 import re
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, basename
 from jinja2 import Environment, FileSystemLoader
 from collections import defaultdict
 from pprint import pprint
+from mincss.processor import Processor
 
 
 roothtmldir = 'www/html'
 env = Environment(loader=FileSystemLoader('.'))
 template = env.get_template('tag-template.html')
+index = env.get_template('tag2.html')
 # ismodified? filename htmlcontent
 
 def normalize(text):
@@ -70,6 +72,7 @@ def inlinking(htmlbody):
 
 def tagging(htmlbody):
     tagdict = defaultdict(list)
+    indexdict = defaultdict(list)
     mybody = list(htmlbody)
     for f, html in htmlbody:
         title = gettitle(html)
@@ -79,8 +82,15 @@ def tagging(htmlbody):
         # all links within the tags section
         for tag in soup.findAll('a'):
             tagname = tag.string.strip()
-            ref = '../' + f
+            ref = '/html/' + f
+            indexdict[tagname].append((title, f))
             tagdict[tagname].append((title, ref))
+
+    # All-Tag Index
+    # list of (tag, tagdict[tag])
+    inject = [(tag, tag.title(), indexdict[tag]) for tag in indexdict]
+    mybody.append(('index.html', index.render(files=inject)))
+
     for tag in tagdict:
         f = "tags/%s.html" % tag
         #f = "%s/tags/%s.html" % (htmldir, tag)
@@ -88,9 +98,29 @@ def tagging(htmlbody):
         mybody.append((f, html))
     return mybody
 
-#     for tag in tagdict:
-#         with open("%s/tags/%s.html" % (htmldir, tag), "wb") as fh:
-#             fh.write(template.render(tag=tag, files=tagdict[tag]))
+def updatecss(htmlbody):
+    outfiles = list()
+    for f, html in htmlbody:
+        parse = SoupStrainer('link', {'href': '../css/mangled.css'})
+        soup = BeautifulSoup(html, 'lxml')
+        for link in soup.find_all(parse):
+            base = f.split('.')[0]
+            print base
+            css = '/css/%s.css' % base
+            link['href'] = css
+        outfiles.append((f, soup.prettify("utf-8")))
+    return outfiles 
+def gencss(htmldir, htmlfiles):
+    fullpaths = map(lambda x: join(htmldir, x), htmlfiles)
+    basenames = map(lambda x: x.split('.')[0], htmlfiles)
+    cssdir = '../www/css/'
+    p = Processor(optimize_lookup=True)
+    for f, b in zip(fullpaths, basenames):
+        p.process(f)
+        for css in p.links:
+            cssfile = join(cssdir, b) + ".css"
+            with open(cssfile, 'wb') as fh:
+                fh.write(css.after)
 
 htmldir = '../www/html/'
 htmlfiles = [f for f in listdir(htmldir) if isfile(join( htmldir, f )) and re.match('.*\.html$', f )]
@@ -99,6 +129,11 @@ htmlbody = [(f, open(join(htmldir, f), 'r').read()) for f in htmlfiles]
 # filepaths need to be relative to www/html/ dir
 htmlbody = inlinking(htmlbody) # substitutes in-links
 htmlbody = tagging(htmlbody) # adds a bunch of tag-page-lists into /tags
+
+# css was for mincss, but this is a bad idea
+# individual mincss'd files for each page would kill caching
+# gencss(htmldir, htmlfiles)
+# htmlbody = updatecss(htmlbody)
 
 for f, html in htmlbody:
     with open(join(htmldir, f), "wb") as fh:

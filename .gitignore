@@ -10,6 +10,7 @@ compiled/*
 */pollen-cache/*
 */compiled/*
 
-
+# compiled website
+site/www/*
 
 
