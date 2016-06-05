@@ -66,7 +66,7 @@ a {
 a.extlink:after {
     /* no space, then degree-symbol */
     content: "\FEFF \00B0";
-    margin-left: 0.10em;
+    margin-left: -0.20em;
     font-size: 90%;
     top: -0.10em;
     color: #933;

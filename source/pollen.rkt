@@ -132,7 +132,7 @@
             ;; this is just for simple in-text math unicode
             ;; proper math would utilize mathjax.
             (λ (x) (string-replace x "+" "＋"))
-            ;; replace / with ÷ if it's preceded/followed with numbers or parenthesis
+            ;; division -- replace / with ÷ if it's preceded/followed with numbers or parenthesis
             ;; otherwise its probably part of a normal string like/or http://
             (λ (x) (string-replace x #px"(?<=[\\d()] ?)/(?= ?[\\d()])" "÷"))
             (λ (x) (string-replace x "<" "＜"))
