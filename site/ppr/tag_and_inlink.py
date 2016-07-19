@@ -19,7 +19,7 @@ def normalize(text):
     return text.strip().lower()
 
 def gettitle(html):
-    parse = SoupStrainer('h1', id='title')
+    parse = SoupStrainer('h1')
     realtitle = BeautifulSoup(html, 'lxml', parse_only=parse).get_text()
     return realtitle
 

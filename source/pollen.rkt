@@ -41,10 +41,12 @@
 (define (func . content)
   `(span ((class "function-name")) ,@content))
 
+;(define (section . content)
+;  `(@
+;     (hr ((class "section-hr")))
+;     (span ((class "section")) ,@content)))
 (define (section . content)
-  `(@
-     (hr)
-     (span ((class "section")) ,@content)))
+  `(h2 ,@content))
 
 ;;; def is for displaying a defined word (in left-hand margin)
 ;;; also prints the word in-place.
@@ -112,6 +114,7 @@
 (define (blockquote author . elements)
   (txexpr 'blockquote empty
           `((p ,@elements)
+            (hr)
             (footer ,author))))
 
 

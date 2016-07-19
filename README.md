@@ -34,6 +34,8 @@ http://chimera.labs.oreilly.com/books/1234000001802/ch07.html *Diagrams*
 
 https://www.w3.org/TR/css-text-3/#intro *2-Column Tables*
 
+http://blog.zorinaq.com/release-of-hablog-and-new-design/? *Comments & highlighting*
+
 ### particularly for code
 http://unitscale.com/mb/technique/pollen.rkt.html
 

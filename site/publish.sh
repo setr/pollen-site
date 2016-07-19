@@ -51,27 +51,30 @@ cd ppr
 
 cd $DIRECTORY
 ### MINCSS ###
-# start up a simple webserver so the css paths function correctly
-cd www
-python -m SimpleHTTPServer 8000 &
-serverpid=$!
+# # start up a simple webserver so the css paths function correctly
+# cd www
+# python -m SimpleHTTPServer 8000 &
+# serverpid=$!
+# 
+# # mincss removes any css that isn't being used by the site
+# # finds the lowest_common_denominator
+# # not doing it on an individual basis, because we'd be worse off due to caching.
+# # not using it through python because it's not as effective, for whatever reason
+# serverpath="http://localhost:8000/"
+# args=""
+# for f in `ls html/*.html`; do
+#     args+="$serverpath$f "
+# done
+# echo $args
+# 
+# # mincss the notes
+# mincss $args --outputdir css/
+# # mincss a single tag-file (since they're all going to be the same)
+# mincss "$serverpath$(ls html/tags/*.html | head -n 1)" --outputdir css/
+# kill $serverpid
 
-# mincss removes any css that isn't being used by the site
-# finds the lowest_common_denominator
-# not doing it on an individual basis, because we'd be worse off due to caching.
-# not using it through python because it's not as effective, for whatever reason
-serverpath="http://localhost:8000/"
-args=""
-for f in `ls html/*.html`; do
-    args+="$serverpath$f "
-done
-echo $args
 
-# mincss the notes
-mincss $args --outputdir css/
-# mincss a single tag-file (since they're all going to be the same)
-mincss "$serverpath$(ls html/tags/*.html | head -n 1)" --outputdir css/
-kill $serverpid
+
 
 # cd $DIRECTORY
 # # tags only get generated after

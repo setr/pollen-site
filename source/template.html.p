@@ -12,28 +12,30 @@
 
     </head>
     <body>
-        <div id="sidebar">
-            <div id="logo">
-                <!-- img link -->
+        <div id="grid">
+            <div id="left">
+                <div id="sidebar">
+                    <ul>
+                        <li> <a> Index </a> </li>
+                        <li> <a> Keys </a> </li>
+                        <li> <a> Mine </a> </li>
+                    </ul>
+                </div>
             </div>
-            <div id="sidebar-links">
-                <p>
-                    <!-- list of links -->
-                    <a> Index </a>
 
-                    <a> Keys </a>
+            <div id="right">
+                <div id="header">
+                    ◊(->html `(h1 ,(select-from-metas 'title here)))
+                    ◊when/splice[(select-from-metas 'tags here)]{
+                        ◊(->html `(div ((class "tags"))
+                            ,@(format-cats (select-from-metas 'tags here))))
+                    }
+                </div>
 
-                    <a> Mine </a>
-                </p>
+                <div id="content">
+                    ◊(->html doc #:splice #t)
+                </div>
             </div>
         </div>
-        ◊(->html `(h1 ((id "title")) ,(select-from-metas 'title here)))
-        ◊when/splice[(select-from-metas 'tags here)]{
-            ◊(->html `(div ((class "tags"))
-                        ,@(format-cats (select-from-metas 'tags here))))
-        }
-
-            ◊(->html doc #:splice #t)
-
     </body>
 </html>
